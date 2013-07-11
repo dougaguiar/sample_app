@@ -32,13 +32,21 @@ describe User do
   it { should be_valid }
   it { should_not be_admin }
 
-  describe"with admin attribute set to 'true'" do
+  describe "with admin attribute set to 'true'" do
     before do
       @user.save!
       @user.toggle!(:admin)
     end
     
     it { should be_admin}
+  end
+  
+  describe "accessible attributes" do
+    it "should not allow access to admin" do
+      expect do
+        User.new(admin: @user.admin)
+      end.to raise_error(ActiveModel::MassAssignmentSecurity::Error)
+    end    
   end
 
   describe "when name is not present" do
