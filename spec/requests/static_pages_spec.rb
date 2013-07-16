@@ -19,16 +19,45 @@ describe "Static Pages" do
     
     describe "for signed-in users" do
       let(:user) { FactoryGirl.create(:user) }
+      
+      before { valid_signin user }
+      
+      describe "without posts, the micropost sidebar" do
+        before { visit root_path }        
+
+        it { should have_content('0 microposts') }
+      end
+      
+      describe "with 1 post, the micropost sidebar" do
+        before do
+          FactoryGirl.create(:micropost, user: user, content: "Lorem ipsum")
+          visit root_path
+        end
+
+        it { should have_content('1 micropost') }
+      end
+      
+      describe "with more than 1 post, the micropost sidebar" do
+        before do
+          FactoryGirl.create(:micropost, user: user, content: "Lorem ipsum")
+          FactoryGirl.create(:micropost, user: user, content: "Dolor sit amet")
+          visit root_path
+        end
+
+        it { should have_content('2 microposts') }
+      end
+      
+      describe "should render the users's feed" do
+      
       before do
         FactoryGirl.create(:micropost, user: user, content: "Lorem ipsum")
         FactoryGirl.create(:micropost, user: user, content: "Dolor sit amet")
-        valid_signin user
-        visit root_path
+        visit root_path      
       end
-
-      it "should render the user's feed" do
-        user.feed.each do |item|
-          page.should have_selector("li##{item.id}", text: item.content)
+        it "should render the user's feed" do
+          user.feed.each do |item|
+            page.should have_selector("li##{item.id}", text: item.content)
+          end
         end
       end
     end
