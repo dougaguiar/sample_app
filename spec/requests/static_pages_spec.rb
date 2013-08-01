@@ -29,36 +29,34 @@ describe "Static Pages" do
       end
       
       describe "with 1 post, the micropost sidebar" do
-        before do
-          FactoryGirl.create(:micropost, user: user, content: "Lorem ipsum")
-          visit root_path
-        end
+        let!(:m1) { FactoryGirl.create(:micropost, user: user, content: "Lorem ipsum") }
+        
+        before { visit root_path }
 
         it { should have_content('1 micropost') }
       end
       
       describe "with more than 1 post, the micropost sidebar" do
-        before do
-          FactoryGirl.create(:micropost, user: user, content: "Lorem ipsum")
-          FactoryGirl.create(:micropost, user: user, content: "Dolor sit amet")
-          visit root_path
-        end
+        let!(:m1) { FactoryGirl.create(:micropost, user: user, content: "Lorem ipsum") }
+        let!(:m2) { FactoryGirl.create(:micropost, user: user, content: "Dolor sit amet") }
+        
+        before { visit root_path }
 
         it { should have_content('2 microposts') }
       end
       
       describe "should render the users's feed" do
+        let(:m1) { FactoryGirl.create(:micropost, user: user, content: "Lorem ipsum") }
+        let(:m2) { FactoryGirl.create(:micropost, user: user, content: "Dolor sit amet") }      
       
-      before do
-        FactoryGirl.create(:micropost, user: user, content: "Lorem ipsum")
-        FactoryGirl.create(:micropost, user: user, content: "Dolor sit amet")
-        visit root_path      
-      end
+        before { visit root_path }
+      
         it "should render the user's feed" do
           user.feed.each do |item|
             page.should have_selector("li##{item.id}", text: item.content)
           end
         end
+        
       end
     end
   end
