@@ -55,6 +55,9 @@ describe "Static Pages" do
           user.feed.each do |item|
             page.should have_selector("li##{item.id}", text: item.content)
           end
+          
+          it "and should not show the delete button for other's users microposts"
+          
         end
         
       end
