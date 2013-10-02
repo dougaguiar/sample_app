@@ -63,7 +63,7 @@ describe "User pages" do
       it { should have_content(user.microposts.count) }
     end
     
-    describe "pagination" do
+    describe "micropost pagination" do
 
       before(:all) { 30.times { FactoryGirl.create(:micropost, user: user, content: "Foo") } }
       after(:all)  { Micropost.delete_all }
@@ -77,6 +77,15 @@ describe "User pages" do
       end
     end
   end
+  
+#  describe "microposts feed" do
+#    let(:user) { FactoryGirl.create(:user) }
+#    let(:otheruser) { FactoryGirl.create(:user) }
+#    let!(:m1) { FactoryGirl.create(:micropost, user: otheruser, content: "Foo") }
+        
+#    before { visit user_path(user) }
+  
+#  end
   
   describe "signup page" do
     before { visit signup_path }

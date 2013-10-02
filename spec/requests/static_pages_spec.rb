@@ -45,18 +45,18 @@ describe "Static Pages" do
         it { should have_content('2 microposts') }
       end
       
-      describe "should render the users's feed" do
+      describe "should" do
         let(:m1) { FactoryGirl.create(:micropost, user: user, content: "Lorem ipsum") }
         let(:m2) { FactoryGirl.create(:micropost, user: user, content: "Dolor sit amet") }      
       
         before { visit root_path }
       
-        it "should render the user's feed" do
+        it "render the user's feed" do
           user.feed.each do |item|
             page.should have_selector("li##{item.id}", text: item.content)
           end
           
-          it "and should not show the delete button for other's users microposts"
+          
           
         end
         
