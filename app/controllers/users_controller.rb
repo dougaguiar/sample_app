@@ -1,5 +1,6 @@
 class UsersController < ApplicationController
-  before_filter :signed_in_user, only: [:index, :edit, :update, :destroy]
+  before_filter :signed_in_user,
+                only: [:index, :edit, :update, :destroy, :following, :followers]
   before_filter :correct_user,   only: [:edit, :update]
   before_filter :admin_user, only: :destroy
   before_filter :signed_in_users_do_not_create, only: [:new, :create]
@@ -55,6 +56,20 @@ class UsersController < ApplicationController
   def feed
     # This is preliminary. See "Following users" for the full implementation.
     Micropost.where("user_id = ?", id)
+  end
+  
+  def following
+    @title = "Following"
+    @user = User.find(params[:id])
+    @users = @user.followed_users.paginate(page: params[:page])
+    render 'show_follow'
+  end
+
+  def followers
+    @title = "Followers"
+    @user = User.find(params[:id])
+    @users = @user.followers.paginate(page: params[:page])
+    render 'show_follow'
   end
   
   private
